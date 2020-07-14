@@ -92,9 +92,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'dailyfresh',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
-        'HOST': '104.41.218.156',
+        'USER': 'root',
+        'PASSWORD': '1234',
+        'HOST': '127.0.0.1',
         'PORT':3306,
     }
 }
@@ -208,7 +208,7 @@ FDFS_URL='http://104.41.218.156:80/'
 HAYSTACK_CONNECTIONS = {
     'default': {
         # 使用whoosh引擎
-        'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
         # 索引文件路径
         'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
     }

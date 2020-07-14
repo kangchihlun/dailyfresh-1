@@ -15,7 +15,7 @@ from goods.models import GoodsSKU
 from order.models import OrderInfo, OrderGoods
 from user.models import Address
 from utils.Mixin import LoginRequiredMixin
-from alipay import AliPay
+#from alipay import AliPay
 
 
 class CheckPayView(View):
@@ -134,7 +134,7 @@ class OrderPayView(View):
             )
         except OrderInfo.DoesNotExist as e:
             return JsonResponse({'res': 2, 'errmsg': '订单错误'})
-
+        '''
         # 调用支付宝的支付接口
         alipay = AliPay(
             appid="",
@@ -161,7 +161,7 @@ class OrderPayView(View):
         # 返回应答,引导html页面跳转去接受支付的界面
         pay_url = 'https://openapi.alipay.com/gateway.do?' + order_string
         return JsonResponse({'res': 3, 'pay_url': pay_url})
-
+        '''
 
 class OrderPlaceView(LoginRequiredMixin, View):
     """订单提交页面"""
