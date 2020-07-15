@@ -81,3 +81,14 @@ Nginx+uwsgi
 [https://open.alipay.com/platform/home.htm](https://open.alipay.com/platform/home.htm)    
 * celery   
 [http://docs.jinkan.org/docs/celery/](http://docs.jinkan.org/docs/celery/)   
+
+
+## Kang's Note [建置步驟]
+```javascript 
+conda create -n djv python=3.7 anaconda
+source activate djv
+pip install -r requirements.txt
+啟動 mysql (密碼 1234)
+啟動 redis (密碼 my-secret-pw)
+按 f5 偵錯執行訪問 127.0.0.1:8000/index
+```
