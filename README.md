@@ -90,5 +90,10 @@ source activate djv
 pip install -r requirements.txt
 啟動 mysql (密碼 1234)
 啟動 redis (密碼 my-secret-pw)
+python manage.py makemigrations cart
+python manage.py makemigrations goods
+python manage.py makemigrations order
+python manage.py makemigrations user
+python manage.py migrate
 按 f5 偵錯執行訪問 127.0.0.1:8000/index
 ```
