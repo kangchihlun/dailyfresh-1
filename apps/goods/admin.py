@@ -1,55 +1,63 @@
 from django.contrib import admin
-
-# Register your models here.
+from goods.models import *
 from django.core.cache import cache
-
-from goods.models import GoodsType, IndexPromotionBanner, IndexGoodsBanner, IndexTypeGoodsBanner
 
 
 class BaseModelAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
-        """
-        当促销页被管理员修改时，会触发modelAdmin自动的save_model方法
-        在这里需要重新生成index静态文件
-        """
-        super(BaseModelAdmin, self).save_model(request, obj, form, change)
-
-        # 发出任务让celery重新生成静态页面
+        super().save_model(request, obj, form, change)
+        # 发出任务，让celery worker重新生成首页静态页面
         from celery_tasks.tasks import generate_static_index_html
-        generate_static_index_html()
+        generate_static_index_html.delay()
 
-        # 更新首页的缓存
+        # 清除缓存
         cache.delete('index_page_data')
 
     def delete_model(self, request, obj):
-        """管理员删除时候更新index页面"""
-        super(BaseModelAdmin, self).delete_model(request, obj)
-
-        # 发出任务让celery重新生成静态页面
+        """
+        删除表中数据时调用
+        :param request:
+        :param obj:
+        :return:
+        """
+        super().delete_model(request, obj)
         from celery_tasks.tasks import generate_static_index_html
-        generate_static_index_html()
+        generate_static_index_html.delay()
 
-        # 更新首页的缓存
+        # 清除缓存
         cache.delete('index_page_data')
 
 
-class IndexPromotionBannerAdmin(BaseModelAdmin):
+@admin.register(Goods)
+class GoodsAdmin(BaseModelAdmin):
     pass
 
 
-class IndexGoodsBannerAdmin(BaseModelAdmin):
+@admin.register(GoodsSKU)
+class GoodsSKUAdmin(BaseModelAdmin):
     pass
 
 
+@admin.register(GoodsType)
 class GoodsTypeAdmin(BaseModelAdmin):
     pass
 
 
+@admin.register(IndexPromotionBanner)
+class IndexPromotionBannerAdmin(BaseModelAdmin):
+    pass
+
+
+@admin.register(IndexTypeGoodsBanner)
 class IndexTypeGoodsBannerAdmin(BaseModelAdmin):
     pass
 
 
-admin.site.register(GoodsType, GoodsTypeAdmin)
-admin.site.register(IndexGoodsBanner, IndexGoodsBannerAdmin)
-admin.site.register(IndexPromotionBanner, IndexPromotionBannerAdmin)
-admin.site.register(IndexTypeGoodsBanner, IndexTypeGoodsBannerAdmin)
+@admin.register(IndexGoodsBanner)
+class IndexGoodsBannerAdmin(BaseModelAdmin):
+    pass
+
+# admin.site.register(GoodsType, GoodsTypeAdmin)
+# admin.site.register(IndexTypeGoodsBanner, IndexTypeGoodsBannerAdmin)
+# admin.site.register(IndexPromotionBanner, IndexPromotionBannerAdmin)
+# admin.site.register(IndexGoodsBanner, IndexGoodsBannerAdmin)

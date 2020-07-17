@@ -1,17 +1,17 @@
 {% extends 'base_no_cart.html' %}
 {% load staticfiles %}
-{% block title %}天天生鲜-提交订单{% endblock title %}
-{% block page_title %}提交订单{% endblock page_title %}
+{% block title %}天天生鲜-提交订单{% endblock %}
+{% block page_title %}提交订单{% endblock %}
 {% block body %}
 	<h3 class="common_title">确认收货地址</h3>
 
 	<div class="common_list_con clearfix">
 		<dl>
 			<dt>寄送到：</dt>
-            {% for addr in addrs %}
+			{% for addr in addrs %}
 			<dd><input type="radio" name="addr_id" value="{{ addr.id }}" {% if addr.is_default %}checked{% endif %}>{{ addr.addr }} （{{ addr.receiver }} 收） {{ addr.phone }}</dd>
-		    {% endfor %}
-        </dl>
+			{% endfor %}
+		</dl>
 		<a href="{% url 'user:address' %}" class="edit_site">编辑收货地址</a>
 
 	</div>
@@ -40,7 +40,7 @@
 			<li class="col04">数量</li>
 			<li class="col05">小计</li>		
 		</ul>
-        {% for sku in skus %}
+		{% for sku in skus %}
 		<ul class="goods_list_td clearfix">
 			<li class="col01">{{ forloop.counter }}</li>
 			<li class="col02"><img src="{{ sku.image.url }}"></li>
@@ -50,7 +50,7 @@
 			<li class="col06">{{ sku.count }}</li>
 			<li class="col07">{{ sku.amount }}元</li>
 		</ul>
-        {% endfor %}
+		{% endfor %}
 	</div>
 
 	<h3 class="common_title">总金额结算</h3>
@@ -64,10 +64,10 @@
 	</div>
 
 	<div class="order_submit clearfix">
-        {% csrf_token %}
+		{% csrf_token %}
 		<a href="javascript:;" sku_ids={{ sku_ids }} id="order_btn">提交订单</a>
 	</div>	
-{% endblock body %}
+{% endblock %}
 {% block bottom %}
 	<div class="popup_con">
 		<div class="popup">
@@ -76,7 +76,7 @@
 		
 		<div class="mask"></div>
 	</div>
-{% endblock bottom %}
+{% endblock %}
 {% block bottomfiles %}
 	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
 	<script type="text/javascript">
@@ -114,4 +114,4 @@
 
 		});
 	</script>
-{% endblock bottomfiles %}
+{% endblock %}
