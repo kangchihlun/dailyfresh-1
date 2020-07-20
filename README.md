@@ -167,3 +167,26 @@ python manage.py runserver
 # 后言
 如果本项目能帮助到在学习django2的你或者对你有其他帮助记得给个star噢!:wink:
 若有什么需要改进或者疑问的地方欢迎提出issue 
+
+
+# Kang's Note 
+建置流程
+```
+cd ./devops/compose
+# 啟動後台服務
+docker-compose up
+# 安裝mysql驅動
+yum install mariadb-devel
+# 安裝環境
+pipenv shell
+pipenv install -r requirements.txt
+# 遷移數據庫
+python manage.py makemigrations cart
+python manage.py makemigrations goods
+python manage.py makemigrations order
+python manage.py makemigrations user
+python manage.py migrate
+
+python manage.py createsuperuser
+
+```
