@@ -185,10 +185,11 @@ dmypy.json
 .pyre/
 
 # custom
-Django2_dailyfresh/settings.py
+#Django2_dailyfresh/settings.py
 utils/fdfs/client_deploy.conf
 .idea/*
 
 apps/order/alipay_public_key.pem
 apps/order/app_private_key.pem
 whoosh_index/*
+redis.rdb
