@@ -18,9 +18,12 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
     path('tinymce/', include(('tinymce.urls', 'tinymce'))),  # the routing of tinymce
     path('search/', include(('haystack.urls', 'haystack'))),
     path('user/', include(('user.urls', 'user'), namespace='user')),
+    # 第三方
+    path('accounts/', include('allauth.urls')),
     path('cart/', include(('cart.urls', 'cart'), namespace='cart')),
     path('order/', include(('order.urls', 'order'), namespace='order')),
     path('', include(('goods.urls', 'goods'), namespace='goods')),

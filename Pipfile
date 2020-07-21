@@ -42,6 +42,8 @@ Pillow = "==6.2.2"
 PyMySQL = "==0.9.3"
 Whoosh = "==2.7.4"
 py3Fdfs = "==2.2.0"
+django-allauth = "==0.39.1"
+sorl-thumbnail = "==12.5.0"
 
 [requires]
 python_version = "3.7"
