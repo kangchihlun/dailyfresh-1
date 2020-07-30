@@ -1,10 +1,10 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.views.generic import View
+from django.views.generic import View , DetailView, RedirectView, UpdateView
 from django.http import HttpResponse
 from django.conf import settings
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout , get_user_model
 from django_redis import get_redis_connection
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import SignatureExpired
@@ -141,6 +141,7 @@ class LoginView(View):
             return render(request, 'login.html', {'errmsg': '用户名或密码错误'})
 
 
+User = get_user_model()
 # /user/logout
 class LogoutView(View):
     def get(self, request):
@@ -151,8 +152,13 @@ class LogoutView(View):
 
 
 # /user
-class UserInfoView(LoginRequiredMixin, View):
+User = get_user_model()
+
+class UserInfoView(LoginRequiredMixin, DetailView):
     """用户中心-信息页"""
+    model = User
+    slug_field = "username"
+    slug_url_kwarg = "username"
 
     def get(self, request):
         # django会把request.user传给模板
@@ -305,3 +311,17 @@ class AddressView(LoginRequiredMixin, View):
                                phone=phone,
                                is_default=is_default)
         return redirect(reverse('user:address'))
+
+
+
+# 第三方登入重定向，導回首頁
+# 其實在 settings.py 設定 LOGIN_REDIRECT_URL = "user:user" 一樣意思
+class UserRedirectView(LoginRequiredMixin, RedirectView):
+
+    permanent = False
+
+    def get_redirect_url(self):
+        return reverse("user:user")
+
+
+user_redirect_view = UserRedirectView.as_view()

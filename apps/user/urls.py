@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 from user.views import RegisterView, ActiveView, LoginView, \
-    UserInfoView, UserOrderView, AddressView, LogoutView
-
+    UserInfoView, UserOrderView, AddressView, LogoutView,\
+    user_redirect_view
 urlpatterns = [
     path('register', RegisterView.as_view(), name='register'),
     re_path('active/(?P<token>.*)$', ActiveView.as_view(), name='active'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('', UserInfoView.as_view(), name='user'),
     path('order/<int:page>', UserOrderView.as_view(), name='order'),
     path('address', AddressView.as_view(), name='address'),
+    path("~redirect/", view=user_redirect_view, name="redirect"),
 ]
