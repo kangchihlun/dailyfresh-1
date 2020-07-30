@@ -1,0 +1,11 @@
+{% load i18n %}
+{% load account socialaccount %}
+{% load socialaccount %}
+{% get_providers as socialaccount_providers %}
+{% for provider in socialaccount_providers %}
+    <a title="{{provider.name}}" 
+        href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+        <img width="48px" src="/static/images/icons/{{ provider.name|lower }}.svg">
+    </a>
+    
+{% endfor %}

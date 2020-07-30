@@ -1,0 +1,11 @@
+{% load i18n %}
+{% load account socialaccount %}
+{% load socialaccount %}
+{% get_providers as socialaccount_providers %}
+{% for provider in socialaccount_providers %}
+    <a title="{{provider.name}}" class="btn-primary btn-{{ provider.name|lower }}"
+        href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+        <span class="login_btn"></span> 使用 {{provider.name}} 登入
+    </a>
+    <div class="divider"></div>
+{% endfor %}
