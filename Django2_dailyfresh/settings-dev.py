@@ -192,7 +192,7 @@ LOGIN_URL = '/user/login'
 DEFAULT_FILE_STORAGE = 'utils.fdfs.storage.FDFSStorage'
 # Set fastdfs using the client of conf file path
 # FDFS_CLIENT_CONF = '../utils/fdfs/client_deploy.conf'
-FDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fdfs/client_deploy.conf')
+FDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fdfs/client.conf')
 # Set IP:port
 
 FDFS_STORAGE_URL = 'http://127.0.0.1:22122'  # fdfs服务器的ip和端口，注意端口是nginx的端口
