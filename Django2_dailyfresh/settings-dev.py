@@ -160,12 +160,15 @@ TINYMCE_DEFAULT_CONFIG = {
 # QQ Email for django config
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.qq.com'
-EMAIL_PORT = 25
-EMAIL_HOST_USER = 'xxxx@qq.com'  # 发送邮件的邮箱
-EMAIL_HOST_PASSWORD = 'xxxx'  # qq邮箱授权码
-# EMAIL_USE_TLS = True  # 与SMTP服务器通信时，是否启动TLS链接(安全链接)
-EMAIL_FROM = '天天生鲜<XXXXX@qq.com>'  # EMAIL_FROM 和 EMAIL_HOST_USER必须一样
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-host
+# 注意：要使用gmail寄信如果沒有自己同意開啟低安全性是不會通過的
+# https://www.google.com/settings/security/lesssecureapps
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'yourname@gmail.com'
+EMAIL_HOST_PASSWORD = 'your gmail password'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = "strategy-maestro <noreply@strategy-maestro.com>"
 
 # django-redis cache configuration
 # https://django-redis-chs.readthedocs.io/zh_CN/latest/
@@ -180,6 +183,31 @@ CACHES = {
         }
     }
 }
+
+
+# Celery
+# ------------------------------------------------------------------------------
+if USE_TZ:
+    # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-timezone
+    CELERY_TIMEZONE = TIME_ZONE
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
+CELERY_BROKER_URL = 'redis://default:my-secret-pw@127.0.0.1:6379/0' # env("CELERY_BROKER_URL")
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-accept_content
+CELERY_ACCEPT_CONTENT = ["json"]
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-task_serializer
+CELERY_TASK_SERIALIZER = "json"
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_serializer
+CELERY_RESULT_SERIALIZER = "json"
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-time-limit
+# TODO: set to whatever value is adequate in your circumstances
+CELERY_TASK_TIME_LIMIT = 5 * 60
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-soft-time-limit
+# TODO: set to whatever value is adequate in your circumstances
+CELERY_TASK_SOFT_TIME_LIMIT = 60
+
+
 
 # The configuration of the session
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"

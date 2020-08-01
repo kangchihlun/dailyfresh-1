@@ -12,10 +12,12 @@ from itsdangerous import SignatureExpired
 from order.models import OrderInfo, OrderGoods
 from user.models import User, Address
 from goods.models import GoodsSKU
-from celery_tasks.tasks import send_register_active_email
+
 from utils.mixin import LoginRequiredMixin
 import re
 
+#from django.core.mail import send_mail
+from .tasks import send_register_active_email
 
 class RegisterView(View):
     """注册类视图"""
@@ -34,10 +36,6 @@ class RegisterView(View):
         if not all([username, password, email]):
             # 数据不完整
             return render(request, 'register.html', {'errmsg': '用户信息不完整'})
-
-        if not re.match(r'^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$', email):
-            # 邮箱格式不正确
-            return render(request, 'register.html', {'errmsg': '邮箱不合法'})
 
         if allow != 'on':
             # 是否同意协议
@@ -58,14 +56,28 @@ class RegisterView(View):
         user.is_active = 0  # 禁止激活
         user.save()
 
+        
         # 发送激活邮件，包含激活链接 /user/active/id
         # 加密用户的身份信息,生成激活token
         serializer = Serializer(settings.SECRET_KEY, 3600)
         info = {'confirm': user.id}
         token = serializer.dumps(info).decode('utf8')
 
+        '''
+        subject = '天天生鲜欢迎信息'
+        message = ''
+        html_message = '<h1>%s, 欢迎成为天天生鲜注册会员<h1>' \
+                    '请点击下面链接激活账户<br/>' \
+                    '<a href="http://127.0.0.1:8000/user/active/%s">' \
+                    'http://127.0.0.1:8000/user/active/%s</a>' % (username, token, token)
+        sender = settings.DEFAULT_FROM_EMAIL
+        receiver = [email]
+        send_mail(subject, message=message, from_email=sender, recipient_list=receiver, html_message=html_message)
+        '''
+
         # 异步发送邮件
-        send_register_active_email.delay(email, username, token)
+        res = send_register_active_email.delay(email, username, token)
+
         # 返回应答,跳转到index
         return redirect(reverse('goods:index'))
 

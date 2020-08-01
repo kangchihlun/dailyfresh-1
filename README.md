@@ -189,4 +189,9 @@ python manage.py migrate
 
 python manage.py createsuperuser
 
+# 2020-08-02 對 celery task 做了改寫
+# django啟動前先啟動 celery worker
+
+celery -A celery_tasks.celery_app worker -l info
+
 ```
