@@ -16,7 +16,7 @@ def send_register_active_email(to_email, username, token):
                    '请点击下面链接激活账户<br/>' \
                    '<a href="http://127.0.0.1:8000/user/active/%s">' \
                    'http://127.0.0.1:8000/user/active/%s</a>' % (username, token, token)
-    sender = settings.EMAIL_FROM
+    sender = settings.DEFAULT_FROM_EMAIL
     receiver = [to_email]
     send_mail(subject, message=message, from_email=sender, recipient_list=receiver, html_message=html_message)
 
