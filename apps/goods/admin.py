@@ -3,11 +3,12 @@ from goods.models import *
 from django.core.cache import cache
 
 
+
 class BaseModelAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
         # 发出任务，让celery worker重新生成首页静态页面
-        from celery_tasks.tasks import generate_static_index_html
+        from .tasks import generate_static_index_html
         generate_static_index_html.delay()
 
         # 清除缓存
@@ -21,7 +22,7 @@ class BaseModelAdmin(admin.ModelAdmin):
         :return:
         """
         super().delete_model(request, obj)
-        from celery_tasks.tasks import generate_static_index_html
+        from .tasks import generate_static_index_html
         generate_static_index_html.delay()
 
         # 清除缓存
